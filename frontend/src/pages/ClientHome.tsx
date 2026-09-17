@@ -5,6 +5,7 @@ import { api, type CounsellingSession, type User } from "../api";
 import { useIdentity } from "../context/IdentityContext";
 import { CounsellorCard } from "../components/CounsellorCard";
 import { BookingModal } from "../components/BookingModal";
+import { IntakeQuiz } from "../components/IntakeQuiz";
 import { Overlay } from "../components/Overlay";
 import { SessionRow } from "../components/SessionRow";
 
@@ -24,7 +25,9 @@ export function ClientHome() {
   const [specialtyFilter, setSpecialtyFilter] = useState<string | null>(null);
   const [sessions, setSessions] = useState<CounsellingSession[]>([]);
   const [bookingTarget, setBookingTarget] = useState<User | null>(null);
+  const [showQuiz, setShowQuiz] = useState(false);
   const [matching, setMatching] = useState(false);
+  const [matchingFeeling, setMatchingFeeling] = useState<string | null>(null);
   const pollRef = useRef<number | null>(null);
 
   const loadCounsellors = () => api.listCounsellors().then(setCounsellors);
@@ -48,11 +51,13 @@ export function ClientHome() {
     ? counsellors.filter((c) => c.specialty === specialtyFilter)
     : counsellors;
 
-  async function talkNow() {
+  async function talkNow(specialty: string | null, feeling: string | null) {
     if (!identity) return;
+    setShowQuiz(false);
+    setMatchingFeeling(feeling);
     setMatching(true);
     try {
-      const session = await api.requestInstant(identity.id);
+      const session = await api.requestInstant(identity.id, specialty ?? undefined);
       if (session.status === "confirmed") {
         setMatching(false);
         navigate(`/session/${session.id}`);
@@ -80,7 +85,7 @@ export function ClientHome() {
             <h2>Need to talk right now?</h2>
             <p>We'll match you with the next available counsellor. Usually takes under a minute.</p>
           </div>
-          <button className="btn talk-now-btn" onClick={talkNow} disabled={matching}>
+          <button className="btn talk-now-btn" onClick={() => setShowQuiz(true)} disabled={matching}>
             {matching ? <Loader2 size={17} className="spin-icon" /> : <PhoneCall size={17} strokeWidth={2} />}
             Talk Now
           </button>
@@ -137,12 +142,18 @@ export function ClientHome() {
         />
       )}
 
+      {showQuiz && (
+        <IntakeQuiz onClose={() => setShowQuiz(false)} onComplete={talkNow} />
+      )}
+
       {matching && (
         <Overlay>
           <Loader2 size={40} strokeWidth={2} className="spin-icon" style={{ display: "block", margin: "4px auto 20px", color: "var(--teal-600)" }} />
           <h3 style={{ textAlign: "center", marginBottom: 6 }}>Finding you a counsellor…</h3>
           <p className="muted" style={{ textAlign: "center" }}>
-            Hang tight, this usually only takes a moment.
+            {matchingFeeling
+              ? `Hang tight — matching you with someone who can meet you while you're feeling ${matchingFeeling.toLowerCase()}.`
+              : "Hang tight, this usually only takes a moment."}
           </p>
         </Overlay>
       )}

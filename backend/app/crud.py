@@ -77,15 +77,18 @@ def set_counsellor_status(
     return counsellor
 
 
-def _find_least_recently_assigned_counsellor(db: DBSession) -> models.User | None:
-    available = (
-        db.query(models.User)
-        .filter(
-            models.User.role == models.Role.counsellor,
-            models.User.status == models.CounsellorStatus.available,
-        )
-        .all()
+def _find_least_recently_assigned_counsellor(
+    db: DBSession, specialty: str | None = None
+) -> models.User | None:
+    query = db.query(models.User).filter(
+        models.User.role == models.Role.counsellor,
+        models.User.status == models.CounsellorStatus.available,
     )
+    available = query.all()
+    if specialty:
+        matching = [c for c in available if c.specialty == specialty]
+        if matching:
+            available = matching
     if not available:
         return None
 
@@ -127,7 +130,7 @@ def create_scheduled_session(
 def create_instant_session(
     db: DBSession, request: schemas.InstantSessionCreate
 ) -> models.CounsellingSession:
-    counsellor = _find_least_recently_assigned_counsellor(db)
+    counsellor = _find_least_recently_assigned_counsellor(db, request.specialty)
     session = models.CounsellingSession(
         client_id=request.client_id,
         type=models.SessionType.instant,

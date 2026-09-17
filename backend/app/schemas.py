@@ -37,6 +37,7 @@ class ScheduledSessionCreate(BaseModel):
 
 class InstantSessionCreate(BaseModel):
     client_id: int
+    specialty: str | None = None
 
 
 class SessionOut(BaseModel):

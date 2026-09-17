@@ -757,6 +757,36 @@ textarea {
   background: var(--clay-600);
 }
 
+/* ---------- intake quiz ---------- */
+
+.quiz-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.quiz-option {
+  border: 1px solid var(--border-soft);
+  background: var(--surface-1);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-700);
+  text-align: left;
+  cursor: pointer;
+}
+
+.quiz-option:hover {
+  border-color: var(--teal-500);
+}
+
+.quiz-option.active {
+  background: var(--teal-100);
+  border-color: var(--teal-600);
+  color: var(--teal-900);
+}
+
 /* ---------- filters ---------- */
 
 .filter-row {

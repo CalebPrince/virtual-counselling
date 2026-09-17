@@ -72,10 +72,10 @@ export const api = {
       body: JSON.stringify(input),
     }),
 
-  requestInstant: (client_id: number) =>
+  requestInstant: (client_id: number, specialty?: string) =>
     request<CounsellingSession>("/api/sessions/instant", {
       method: "POST",
-      body: JSON.stringify({ client_id }),
+      body: JSON.stringify({ client_id, specialty }),
     }),
 
   getSession: (id: number) => request<CounsellingSession>(`/api/sessions/${id}`),
