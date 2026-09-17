@@ -1,9 +1,13 @@
 # Haven — virtual counselling platform (pitch demo)
 
+**Live demo:** https://haven-counselling-two.vercel.app/
+
 A working demo of a telehealth-style counselling platform: clients can browse and book
 licensed counsellors, request an on-demand match ("Talk Now"), and join a live video
 session room. Counsellors manage their availability and see their session queue from a
-dashboard. Built as a pitch/demo product, not a production HIPAA-compliant system.
+dashboard. This is the web demo referenced in the *Mobile Counselling App* proposal — it
+proves out the booking/matching flow that the proposed iOS + Android app is built on top of.
+Built as a pitch/demo product, not a production HIPAA-compliant system.
 
 - **Frontend:** React 19 + TypeScript + Vite, plain CSS (no UI framework), `react-router-dom`
 - **Backend:** FastAPI + SQLAlchemy + SQLite
@@ -66,10 +70,33 @@ FastAPI service backing all of the above:
 - Auto-seeds 5 counsellors (across the 5 specialties) and 2 clients on first run
   ([`seed.py`](backend/app/seed.py)) against a local SQLite DB
 
-## Not yet built
+## Not yet built (in this demo)
 
 - No real authentication (no passwords, no sessions/tokens)
 - No real video/audio transport — the session room is a UI shell with local camera preview only
 - Chat panel in the session room is not wired to any backend
 - "Record session" is a UI-only toggle, nothing is actually recorded or stored
 - No payments/billing
+
+## How this maps to the mobile app proposal
+
+This repo is the web proof-of-concept behind the *Mobile Counselling App* proposal. Status of
+each proposed feature against what exists here today:
+
+| Proposal feature | Status in this demo |
+| --- | --- |
+| Talk Now (instant support) | ✅ Built — matching flow + pre-match check-in |
+| Scheduled bookings | ✅ Built |
+| Counsellor availability & queue management | ✅ Built |
+| Landing page | ✅ Built |
+| Admin dashboard | ⚠️ Partial — counsellor dashboard exists; no separate admin/login area |
+| 24/7 toll-free line (Twilio) | ❌ Not built — phone routing not implemented |
+| In-person appointments | ❌ Not built — only call-type sessions exist |
+| QR code access | ❌ Not built |
+| Native iOS/Android app | ❌ Not built — this is a responsive web app only |
+| Real video/audio (Daily.co or equivalent) | ❌ Not built — session room is a UI shell |
+| Encryption, RBAC, secure password storage | ❌ Not built — no auth layer at all yet |
+
+In short: the booking/matching *logic and UX* referenced in the proposal is proven out here;
+the native app shell, telephony, real video transport, admin area, and security layer described
+in the proposal are the scope of the next build.
