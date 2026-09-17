@@ -137,126 +137,6 @@ export function Landing() {
       </div>
 
       <div className="container">
-        <div className="landing-panel-wrap" id="get-started" ref={panelRef}>
-        <div className="landing-panel card">
-          {!role ? (
-            <>
-              <h2 style={{ fontSize: "1.3rem", marginBottom: 4 }}>Who's joining?</h2>
-              <p className="muted" style={{ marginBottom: 20 }}>
-                No password needed for this preview — just pick a side.
-              </p>
-              <div className="role-options">
-                <button className="role-card" onClick={() => setRole("client")}>
-                  <span className="role-card-icon">
-                    <MessageCircleHeart size={18} strokeWidth={1.8} />
-                  </span>
-                  <span>
-                    <span className="role-card-title">I'm a client</span>
-                    <span className="muted" style={{ fontSize: "0.85rem" }}>
-                      Book a session or talk to someone right now
-                    </span>
-                  </span>
-                </button>
-                <button className="role-card" onClick={() => setRole("counsellor")}>
-                  <span className="role-card-icon">
-                    <Stethoscope size={18} strokeWidth={1.8} />
-                  </span>
-                  <span>
-                    <span className="role-card-title">I'm a counsellor</span>
-                    <span className="muted" style={{ fontSize: "0.85rem" }}>
-                      Manage availability and see your sessions
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <button className="back-link" onClick={() => setRole(null)}>
-                <ArrowLeft size={14} strokeWidth={2} />
-                Back
-              </button>
-              <h2 style={{ fontSize: "1.3rem", marginBottom: 4 }}>
-                {role === "client" ? "Continue as a client" : "Continue as a counsellor"}
-              </h2>
-              <p className="muted" style={{ marginBottom: 16 }}>
-                Pick an existing demo profile, or create a new one.
-              </p>
-
-              {loading ? (
-                <p className="muted">Loading profiles…</p>
-              ) : existing.length > 0 ? (
-                <div className="profile-list">
-                  {existing.map((user) => {
-                    const photo = photoFor(user.email);
-                    return (
-                      <button key={user.id} className="profile-row" onClick={() => chooseExisting(user)}>
-                        {photo ? (
-                          <img src={photo} alt="" className="profile-row-photo" />
-                        ) : (
-                          <span className="identity-avatar" style={{ background: "var(--teal-600)" }}>
-                            {user.name
-                              .split(" ")
-                              .map((p) => p[0])
-                              .slice(0, 2)
-                              .join("")}
-                          </span>
-                        )}
-                        <span style={{ textAlign: "left" }}>
-                          <span style={{ display: "block", fontWeight: 600 }}>{user.name}</span>
-                          {user.specialty && (
-                            <span className="muted" style={{ fontSize: "0.8rem" }}>
-                              {user.specialty}
-                            </span>
-                          )}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : null}
-
-              <div className="divider">
-                <span>or create new</span>
-              </div>
-
-              <form onSubmit={createIdentity} className="stack-form">
-                <div className="field">
-                  <label>Name</label>
-                  <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Jamie Park" required />
-                </div>
-                <div className="field">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="jamie@example.com"
-                    required
-                  />
-                </div>
-                {role === "counsellor" && (
-                  <div className="field">
-                    <label>Specialty</label>
-                    <select value={specialty} onChange={(e) => setSpecialty(e.target.value)}>
-                      {SPECIALTIES.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-                {error && <p style={{ color: "var(--rose-600)", fontSize: "0.85rem" }}>{error}</p>}
-                <button type="submit" className="btn btn-primary btn-block" disabled={creating}>
-                  {creating ? "Creating…" : "Continue"}
-                </button>
-              </form>
-            </>
-          )}
-        </div>
-        </div>
-
         <section className="marketing-section" id="how-it-works">
           <div className="marketing-head">
             <span className="eyebrow">How Haven works</span>
@@ -507,15 +387,129 @@ export function Landing() {
         </section>
 
         <section className="marketing-section" style={{ paddingTop: 0 }}>
-          <div className="final-cta">
-            <h2>Ready to get started?</h2>
-            <p>Book ahead, or tap Talk Now and get matched in minutes.</p>
-            <div className="final-cta-actions">
-              <button className="btn btn-clay" onClick={scrollToPanel}>
-                Get started
-              </button>
-            </div>
+          <div className="marketing-head center">
+            <span className="eyebrow">Ready when you are</span>
+            <h2>Get started with Haven</h2>
           </div>
+                  <div className="landing-panel-wrap" id="get-started" ref={panelRef}>
+        <div className="landing-panel card">
+          {!role ? (
+            <>
+              <h2 style={{ fontSize: "1.3rem", marginBottom: 4 }}>Who's joining?</h2>
+              <p className="muted" style={{ marginBottom: 20 }}>
+                No password needed for this preview — just pick a side.
+              </p>
+              <div className="role-options">
+                <button className="role-card" onClick={() => setRole("client")}>
+                  <span className="role-card-icon">
+                    <MessageCircleHeart size={18} strokeWidth={1.8} />
+                  </span>
+                  <span>
+                    <span className="role-card-title">I'm a client</span>
+                    <span className="muted" style={{ fontSize: "0.85rem" }}>
+                      Book a session or talk to someone right now
+                    </span>
+                  </span>
+                </button>
+                <button className="role-card" onClick={() => setRole("counsellor")}>
+                  <span className="role-card-icon">
+                    <Stethoscope size={18} strokeWidth={1.8} />
+                  </span>
+                  <span>
+                    <span className="role-card-title">I'm a counsellor</span>
+                    <span className="muted" style={{ fontSize: "0.85rem" }}>
+                      Manage availability and see your sessions
+                    </span>
+                  </span>
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <button className="back-link" onClick={() => setRole(null)}>
+                <ArrowLeft size={14} strokeWidth={2} />
+                Back
+              </button>
+              <h2 style={{ fontSize: "1.3rem", marginBottom: 4 }}>
+                {role === "client" ? "Continue as a client" : "Continue as a counsellor"}
+              </h2>
+              <p className="muted" style={{ marginBottom: 16 }}>
+                Pick an existing demo profile, or create a new one.
+              </p>
+
+              {loading ? (
+                <p className="muted">Loading profiles…</p>
+              ) : existing.length > 0 ? (
+                <div className="profile-list">
+                  {existing.map((user) => {
+                    const photo = photoFor(user.email);
+                    return (
+                      <button key={user.id} className="profile-row" onClick={() => chooseExisting(user)}>
+                        {photo ? (
+                          <img src={photo} alt="" className="profile-row-photo" />
+                        ) : (
+                          <span className="identity-avatar" style={{ background: "var(--teal-600)" }}>
+                            {user.name
+                              .split(" ")
+                              .map((p) => p[0])
+                              .slice(0, 2)
+                              .join("")}
+                          </span>
+                        )}
+                        <span style={{ textAlign: "left" }}>
+                          <span style={{ display: "block", fontWeight: 600 }}>{user.name}</span>
+                          {user.specialty && (
+                            <span className="muted" style={{ fontSize: "0.8rem" }}>
+                              {user.specialty}
+                            </span>
+                          )}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : null}
+
+              <div className="divider">
+                <span>or create new</span>
+              </div>
+
+              <form onSubmit={createIdentity} className="stack-form">
+                <div className="field">
+                  <label>Name</label>
+                  <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Jamie Park" required />
+                </div>
+                <div className="field">
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="jamie@example.com"
+                    required
+                  />
+                </div>
+                {role === "counsellor" && (
+                  <div className="field">
+                    <label>Specialty</label>
+                    <select value={specialty} onChange={(e) => setSpecialty(e.target.value)}>
+                      {SPECIALTIES.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                {error && <p style={{ color: "var(--rose-600)", fontSize: "0.85rem" }}>{error}</p>}
+                <button type="submit" className="btn btn-primary btn-block" disabled={creating}>
+                  {creating ? "Creating…" : "Continue"}
+                </button>
+              </form>
+            </>
+          )}
+        </div>
+        </div>
         </section>
       </div>
     </div>
