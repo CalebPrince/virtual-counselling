@@ -1,7 +1,18 @@
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import { useIdentity } from "../context/IdentityContext";
 
-const NAV_LINKS = ["How it works", "For counsellors", "Pricing", "FAQ"];
+const NAV_LINKS = [
+  { label: "How it works", href: "#how-it-works" },
+  { label: "For counsellors", href: "#counsellors" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "FAQ", href: "#faq" },
+];
+
+function scrollToSection(href: string) {
+  document.querySelector(href)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 function scrollToGetStarted() {
   document.getElementById("get-started")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -12,6 +23,16 @@ export function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const onLanding = location.pathname === "/";
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // Close the drawer on route change and lock body scroll while it's open.
+  useEffect(() => setDrawerOpen(false), [location.pathname]);
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [drawerOpen]);
 
   const initials = identity
     ? identity.name
@@ -39,8 +60,16 @@ export function Header() {
 
         {onLanding && (
           <nav className="main-nav">
-            {NAV_LINKS.map((label) => (
-              <a key={label} href="#" className="main-nav-link" onClick={(e) => e.preventDefault()}>
+            {NAV_LINKS.map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                className="main-nav-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(href);
+                }}
+              >
                 {label}
               </a>
             ))}
@@ -49,7 +78,7 @@ export function Header() {
 
         <div className="topbar-actions">
           {onLanding && (
-            <button className="btn btn-clay btn-sm" onClick={scrollToGetStarted}>
+            <button className="btn btn-clay btn-sm nav-desktop-only" onClick={scrollToGetStarted}>
               Get started
             </button>
           )}
@@ -73,8 +102,54 @@ export function Header() {
               </button>
             </div>
           )}
+
+          {onLanding && (
+            <button
+              className="menu-toggle"
+              aria-label={drawerOpen ? "Close menu" : "Open menu"}
+              aria-expanded={drawerOpen}
+              onClick={() => setDrawerOpen((open) => !open)}
+            >
+              {drawerOpen ? <X size={22} strokeWidth={2} /> : <Menu size={22} strokeWidth={2} />}
+            </button>
+          )}
         </div>
       </div>
+
+      {onLanding && (
+        <>
+          <div
+            className={`nav-drawer-backdrop${drawerOpen ? " open" : ""}`}
+            onClick={() => setDrawerOpen(false)}
+            aria-hidden="true"
+          />
+          <nav className={`nav-drawer${drawerOpen ? " open" : ""}`} aria-hidden={!drawerOpen}>
+            {NAV_LINKS.map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                className="nav-drawer-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setDrawerOpen(false);
+                  scrollToSection(href);
+                }}
+              >
+                {label}
+              </a>
+            ))}
+            <button
+              className="btn btn-clay btn-block"
+              onClick={() => {
+                setDrawerOpen(false);
+                scrollToGetStarted();
+              }}
+            >
+              Get started
+            </button>
+          </nav>
+        </>
+      )}
     </header>
   );
 }

@@ -170,6 +170,83 @@ textarea {
   }
 }
 
+.menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  background: var(--surface-1);
+  color: var(--teal-900);
+  cursor: pointer;
+}
+
+.menu-toggle:hover {
+  border-color: var(--teal-600);
+}
+
+@media (max-width: 860px) {
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .nav-desktop-only {
+    display: none;
+  }
+}
+
+.nav-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 35, 32, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 29;
+}
+
+.nav-drawer-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(78vw, 320px);
+  background: var(--surface-1);
+  box-shadow: -12px 0 40px -16px rgba(22, 51, 46, 0.35);
+  padding: 88px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+  z-index: 30;
+}
+
+.nav-drawer.open {
+  transform: translateX(0);
+}
+
+.nav-drawer-link {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--teal-900);
+  text-decoration: none;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.nav-drawer .btn {
+  margin-top: 18px;
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -578,6 +655,11 @@ textarea {
   display: grid;
   place-items: center;
   flex-shrink: 0;
+}
+
+.role-card-icon--clay {
+  background: var(--clay-100);
+  color: var(--clay-600);
 }
 
 .role-card:hover {
@@ -1527,6 +1609,50 @@ textarea {
 
 .marketing-section {
   padding-block: 72px;
+  position: relative;
+  overflow: hidden;
+}
+
+/*
+ * Each section gets its own soft colour bloom, echoing the same
+ * radial-gradient language the page background already uses (see body's
+ * teal/clay blooms) instead of BetterHelp's hard-edged illustrated shapes —
+ * same idea, Haven's own visual vocabulary. ::before keeps it out of the
+ * DOM/content flow; `overflow: hidden` on the section clips it.
+ */
+.marketing-section::before {
+  content: "";
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.marketing-section--teal::before {
+  top: -220px;
+  right: -160px;
+  background: radial-gradient(circle, var(--teal-100) 0%, transparent 68%);
+}
+
+.marketing-section--clay::before {
+  top: -200px;
+  left: -180px;
+  background: radial-gradient(circle, var(--clay-100) 0%, transparent 68%);
+}
+
+.marketing-section--sage::before {
+  bottom: -240px;
+  right: -160px;
+  background: radial-gradient(circle, var(--sage-100) 0%, transparent 68%);
+}
+
+.marketing-section--amber::before {
+  top: -220px;
+  right: -180px;
+  background: radial-gradient(circle, var(--amber-100) 0%, transparent 68%);
 }
 
 .marketing-head {
@@ -1602,6 +1728,16 @@ textarea {
   border-radius: 999px;
   background: var(--clay-100);
   margin-bottom: 16px;
+}
+
+.step-num--teal {
+  color: var(--teal-700);
+  background: var(--teal-100);
+}
+
+.step-num--sage {
+  color: var(--sage-600);
+  background: var(--sage-100);
 }
 
 .step-card h3 {
@@ -1691,51 +1827,55 @@ table.compare tbody tr:last-child td {
   color: var(--rose-600);
 }
 
-.counsellor-strip {
+.trust-hero {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  margin-bottom: 56px;
 }
 
-.counsellor-mini {
-  background: var(--surface-1);
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-md);
+.trust-hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.trust-hero-copy h2 {
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+}
+
+.trust-hero-copy p {
+  font-size: 1.02rem;
+  max-width: 46ch;
+}
+
+.trust-hero-copy .btn {
+  margin-top: 8px;
+}
+
+.trust-hero-image {
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-pop);
 }
 
-.counsellor-mini img {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
+.trust-hero-image img {
   display: block;
-}
-
-.counsellor-mini-avatar {
   width: 100%;
-  aspect-ratio: 1;
-  display: grid;
-  place-items: center;
-  background: var(--teal-100);
-  color: var(--teal-700);
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.3rem;
+  height: auto;
 }
 
-.counsellor-mini-body {
-  padding: 12px 13px 15px;
-}
-
-.counsellor-mini-body h4 {
-  font-size: 0.92rem;
-  margin-bottom: 2px;
-}
-
-.counsellor-mini-body .eyebrow {
-  margin-bottom: 0;
-  font-size: 0.66rem;
+@media (max-width: 760px) {
+  .trust-hero {
+    grid-template-columns: 1fr;
+  }
+  .trust-hero-image {
+    order: -1;
+    max-width: 420px;
+    margin-inline: auto;
+  }
 }
 
 .testimonial-grid {
@@ -1776,6 +1916,84 @@ table.compare tbody tr:last-child td {
 .testimonial-who-role {
   font-size: 0.78rem;
   color: var(--ink-500);
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.pricing-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  padding: 28px 26px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pricing-card--highlight {
+  border-color: var(--clay-500);
+  box-shadow: var(--shadow-pop);
+}
+
+.pricing-badge {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: var(--clay-100);
+  color: var(--clay-600);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.pricing-name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--teal-900);
+}
+
+.pricing-price {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--teal-900);
+}
+
+.pricing-price span {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-500);
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-size: 0.88rem;
+  color: var(--ink-700);
+}
+
+.pricing-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.pricing-features svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--sage-600);
 }
 
 .faq-list {
@@ -1848,6 +2066,73 @@ details.faq-item p {
   margin: 0 auto 26px;
 }
 
+.final-cta .eyebrow {
+  color: var(--clay-100);
+}
+
+/* ---------- footer ---------- */
+
+.site-footer {
+  margin-top: 48px;
+  border-top: 1px solid var(--border-soft);
+  background: var(--surface-2);
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 32px;
+  padding-block: 48px 32px;
+}
+
+.footer-brand .brand {
+  pointer-events: none;
+}
+
+.footer-tagline {
+  margin-top: 12px;
+  max-width: 34ch;
+  font-size: 0.88rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-links-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--teal-900);
+  margin-bottom: 2px;
+}
+
+.footer-links a {
+  font-size: 0.87rem;
+  color: var(--ink-700);
+  text-decoration: none;
+  width: fit-content;
+}
+
+.footer-links a:hover {
+  color: var(--teal-700);
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--border-soft);
+  padding-block: 18px;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 640px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
 .final-cta-actions {
   display: flex;
   gap: 14px;
@@ -1865,15 +2150,10 @@ details.faq-item p {
   border-color: #fff;
 }
 
-@media (max-width: 960px) {
-  .counsellor-strip {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 @media (max-width: 860px) {
   .steps,
-  .testimonial-grid {
+  .testimonial-grid,
+  .pricing-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -1884,8 +2164,3 @@ details.faq-item p {
   }
 }
 
-@media (max-width: 620px) {
-  .counsellor-strip {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}

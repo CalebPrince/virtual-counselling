@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
 import { useIdentity } from "./context/IdentityContext";
 import { Landing } from "./pages/Landing";
 import { ClientHome } from "./pages/ClientHome";
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/session/:id" element={<SessionRoom />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <Footer />
     </div>
   );
 }

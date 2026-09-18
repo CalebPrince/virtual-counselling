@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
+  Check,
   ChevronDown,
   Clock,
   Lock,
@@ -33,7 +34,6 @@ export function Landing() {
   const [specialty, setSpecialty] = useState(SPECIALTIES[0]);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [team, setTeam] = useState<User[]>([]);
   const panelRef = useRef<HTMLDivElement | null>(null);
 
   function scrollToPanel() {
@@ -49,10 +49,6 @@ export function Landing() {
       .catch(() => setExisting([]))
       .finally(() => setLoading(false));
   }, [role]);
-
-  useEffect(() => {
-    api.listCounsellors().then(setTeam).catch(() => setTeam([]));
-  }, []);
 
   function chooseExisting(user: User) {
     setIdentity(user);
@@ -137,7 +133,7 @@ export function Landing() {
       </div>
 
       <div className="container">
-        <section className="marketing-section" id="how-it-works">
+        <section className="marketing-section marketing-section--teal" id="how-it-works">
           <div className="marketing-head">
             <span className="eyebrow">How Haven works</span>
             <h2>Three steps, no waiting weeks for an opening.</h2>
@@ -148,7 +144,7 @@ export function Landing() {
           </div>
           <div className="steps">
             <div className="step-card">
-              <span className="step-num">1</span>
+              <span className="step-num step-num--teal">1</span>
               <h3>Tell us what's going on</h3>
               <p>
                 A short check-in: what you'd like to talk about, and how you're feeling right
@@ -173,7 +169,7 @@ export function Landing() {
               </div>
             </div>
             <div className="step-card">
-              <span className="step-num">3</span>
+              <span className="step-num step-num--sage">3</span>
               <h3>Talk it through</h3>
               <p>
                 Your session opens right in the Haven app — just a private room for the two of
@@ -187,7 +183,7 @@ export function Landing() {
           </div>
         </section>
 
-        <section className="marketing-section" style={{ paddingTop: 0 }}>
+        <section className="marketing-section marketing-section--sage" style={{ paddingTop: 0 }}>
           <div className="marketing-head">
             <span className="eyebrow">Haven vs. the usual route</span>
             <h2>Waiting weeks for an appointment isn't a plan.</h2>
@@ -243,43 +239,27 @@ export function Landing() {
           </div>
         </section>
 
-        {team.length > 0 && (
-          <section className="marketing-section" id="counsellors" style={{ paddingTop: 0 }}>
-            <div className="marketing-head">
+        <section className="marketing-section marketing-section--clay" id="counsellors" style={{ paddingTop: 0 }}>
+          <div className="trust-hero">
+            <div className="trust-hero-copy">
               <span className="eyebrow">Meet the team</span>
-              <h2>Licensed counsellors across five specialties.</h2>
+              <h2>Licensed counsellors you can actually trust.</h2>
               <p className="muted">
-                A preview of who's on Haven today — real specialties, real availability status.
+                Every counsellor on Haven is licensed and shown with their real specialty,
+                years of experience, and live availability — no guessing who you're about to
+                talk to.
               </p>
+              <button className="btn btn-clay" onClick={scrollToPanel}>
+                Get started
+              </button>
             </div>
-            <div className="counsellor-strip">
-              {team.map((c) => {
-                const photo = photoFor(c.email);
-                const initials = c.name
-                  .replace("Dr. ", "")
-                  .split(" ")
-                  .map((p) => p[0])
-                  .slice(0, 2)
-                  .join("");
-                return (
-                  <div className="counsellor-mini" key={c.id}>
-                    {photo ? (
-                      <img src={photo} alt={c.name} loading="lazy" />
-                    ) : (
-                      <span className="counsellor-mini-avatar">{initials}</span>
-                    )}
-                    <div className="counsellor-mini-body">
-                      <h4>{c.name}</h4>
-                      <span className="eyebrow">{c.specialty}</span>
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="trust-hero-image">
+              <img src="/images/team-collage.webp" alt="A selection of licensed Haven counsellors" loading="lazy" />
             </div>
-          </section>
-        )}
+          </div>
+        </section>
 
-        <section className="marketing-section" style={{ paddingTop: 0 }}>
+        <section className="marketing-section marketing-section--amber" style={{ paddingTop: 0 }}>
           <div className="marketing-head center">
             <span className="eyebrow">From the preview</span>
             <h2>What early testers said</h2>
@@ -294,7 +274,7 @@ export function Landing() {
                 didn't expect that."
               </p>
               <div className="testimonial-who">
-                <span className="identity-avatar" style={{ background: "var(--clay-500)" }}>
+                <span className="identity-avatar" style={{ background: "var(--teal-600)" }}>
                   JL
                 </span>
                 <div>
@@ -324,7 +304,7 @@ export function Landing() {
                 alone lowered the bar to actually show up."
               </p>
               <div className="testimonial-who">
-                <span className="identity-avatar" style={{ background: "var(--clay-500)" }}>
+                <span className="identity-avatar" style={{ background: "var(--sage-600)" }}>
                   JL
                 </span>
                 <div>
@@ -332,6 +312,78 @@ export function Landing() {
                   <div className="testimonial-who-role">Haven preview client</div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="marketing-section" id="pricing" style={{ paddingTop: 0 }}>
+          <div className="marketing-head center">
+            <span className="eyebrow">Simple &amp; transparent</span>
+            <h2>Pricing built around how you use it</h2>
+            <p className="muted">
+              Illustrative preview pricing — book by the session, or go unlimited for a flat
+              monthly rate.
+            </p>
+          </div>
+          <div className="pricing-grid">
+            <div className="pricing-card">
+              <div className="pricing-name">Single session</div>
+              <div className="pricing-price">
+                $60 <span>/ session</span>
+              </div>
+              <ul className="pricing-features">
+                <li>
+                  <Check size={15} strokeWidth={2.4} />
+                  Book any licensed counsellor
+                </li>
+                <li>
+                  <Check size={15} strokeWidth={2.4} />
+                  Video or in-person
+                </li>
+                <li>
+                  <Check size={15} strokeWidth={2.4} />
+                  No subscription required
+                </li>
+              </ul>
+            </div>
+            <div className="pricing-card pricing-card--highlight">
+              <span className="pricing-badge">Most popular</span>
+              <div className="pricing-name">Unlimited monthly</div>
+              <div className="pricing-price">
+                $220 <span>/ month</span>
+              </div>
+              <ul className="pricing-features">
+                <li>
+                  <Check size={15} strokeWidth={2.4} />
+                  Unlimited Talk Now matches
+                </li>
+                <li>
+                  <Check size={15} strokeWidth={2.4} />
+                  Priority scheduling
+                </li>
+                <li>
+                  <Check size={15} strokeWidth={2.4} />
+                  Switch counsellors anytime
+                </li>
+              </ul>
+            </div>
+            <div className="pricing-card">
+              <div className="pricing-name">Care team</div>
+              <div className="pricing-price">Custom</div>
+              <ul className="pricing-features">
+                <li>
+                  <Check size={15} strokeWidth={2.4} />
+                  For employers &amp; organisations
+                </li>
+                <li>
+                  <Check size={15} strokeWidth={2.4} />
+                  Pooled sessions for your team
+                </li>
+                <li>
+                  <Check size={15} strokeWidth={2.4} />
+                  Usage reporting, no clinical detail
+                </li>
+              </ul>
             </div>
           </div>
         </section>
@@ -387,9 +439,10 @@ export function Landing() {
         </section>
 
         <section className="marketing-section" style={{ paddingTop: 0 }}>
-          <div className="marketing-head center">
+          <div className="final-cta">
             <span className="eyebrow">Ready when you are</span>
             <h2>Get started with Haven</h2>
+            <p>One quick step — tell us who you are, and pick up right where this preview leaves off.</p>
           </div>
                   <div className="landing-panel-wrap" id="get-started" ref={panelRef}>
         <div className="landing-panel card">
@@ -412,7 +465,7 @@ export function Landing() {
                   </span>
                 </button>
                 <button className="role-card" onClick={() => setRole("counsellor")}>
-                  <span className="role-card-icon">
+                  <span className="role-card-icon role-card-icon--clay">
                     <Stethoscope size={18} strokeWidth={1.8} />
                   </span>
                   <span>
