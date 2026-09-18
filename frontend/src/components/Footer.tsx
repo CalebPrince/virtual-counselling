@@ -13,19 +13,15 @@ export function Footer() {
       <div className="container footer-inner">
         <div className="footer-brand">
           <span className="brand">
-            <span className="brand-mark">
-              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M9 20c0-5.5 3.5-9 7-9s7 3.5 7 9c0 2-1.5 3-3 3-1 0-1.5-.6-1.5-1.5V17c0-1.2-1-2-2.5-2s-2.5.8-2.5 2v4.5c0 .9-.5 1.5-1.5 1.5-1.5 0-3-1-3-3z"
-                  fill="#E8C9A5"
-                />
-              </svg>
+            <span className="brand-mark" aria-hidden="true">
+              <i />
+              <i />
             </span>
             Haven
           </span>
           <p className="muted footer-tagline">
-            Somebody to talk to, whenever it's time. A product pitch demo — not a real clinical
-            service.
+            A calm, private way to find support that understands you. A product pitch demo, not a
+            real clinical service.
           </p>
         </div>
 
@@ -47,16 +43,16 @@ export function Footer() {
               scrollToSection("#counsellors");
             }}
           >
-            For counsellors
+            Counsellors
           </a>
           <a
-            href="#pricing"
+            href="#safety"
             onClick={(e) => {
               e.preventDefault();
-              scrollToSection("#pricing");
+              scrollToSection("#safety");
             }}
           >
-            Pricing
+            Safety
           </a>
         </div>
 

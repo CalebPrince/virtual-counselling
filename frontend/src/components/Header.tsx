@@ -5,8 +5,8 @@ import { useIdentity } from "../context/IdentityContext";
 
 const NAV_LINKS = [
   { label: "How it works", href: "#how-it-works" },
-  { label: "For counsellors", href: "#counsellors" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Counsellors", href: "#counsellors" },
+  { label: "Safety", href: "#safety" },
   { label: "FAQ", href: "#faq" },
 ];
 
@@ -24,6 +24,7 @@ export function Header() {
   const location = useLocation();
   const onLanding = location.pathname === "/";
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Close the drawer on route change and lock body scroll while it's open.
   useEffect(() => setDrawerOpen(false), [location.pathname]);
@@ -33,6 +34,16 @@ export function Header() {
       document.body.style.overflow = "";
     };
   }, [drawerOpen]);
+
+  // Header is transparent over the hero and picks up a solid background once the page scrolls.
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 8);
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [location.pathname]);
 
   const initials = identity
     ? identity.name
@@ -44,16 +55,12 @@ export function Header() {
     : "";
 
   return (
-    <header className="topbar">
+    <header className={`topbar${scrolled ? " topbar--scrolled" : ""}`}>
       <div className="container topbar-inner">
         <Link to="/" className="brand">
-          <span className="brand-mark">
-            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M9 20c0-5.5 3.5-9 7-9s7 3.5 7 9c0 2-1.5 3-3 3-1 0-1.5-.6-1.5-1.5V17c0-1.2-1-2-2.5-2s-2.5.8-2.5 2v4.5c0 .9-.5 1.5-1.5 1.5-1.5 0-3-1-3-3z"
-                fill="#E8C9A5"
-              />
-            </svg>
+          <span className="brand-mark" aria-hidden="true">
+            <i />
+            <i />
           </span>
           Haven
         </Link>
