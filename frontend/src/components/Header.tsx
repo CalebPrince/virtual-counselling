@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useIdentity } from "../context/IdentityContext";
@@ -123,40 +124,45 @@ export function Header() {
         </div>
       </div>
 
-      {onLanding && (
-        <>
-          <div
-            className={`nav-drawer-backdrop${drawerOpen ? " open" : ""}`}
-            onClick={() => setDrawerOpen(false)}
-            aria-hidden="true"
-          />
-          <nav className={`nav-drawer${drawerOpen ? " open" : ""}`} aria-hidden={!drawerOpen}>
-            {NAV_LINKS.map(({ label, href }) => (
-              <a
-                key={label}
-                href={href}
-                className="nav-drawer-link"
-                onClick={(e) => {
-                  e.preventDefault();
+      {onLanding &&
+        createPortal(
+          <>
+            <div
+              className={`nav-drawer-backdrop${drawerOpen ? " open" : ""}`}
+              onClick={() => setDrawerOpen(false)}
+              aria-hidden="true"
+            />
+            <nav className={`nav-drawer${drawerOpen ? " open" : ""}`} aria-hidden={!drawerOpen}>
+              <button className="nav-drawer-close" aria-label="Close menu" onClick={() => setDrawerOpen(false)}>
+                <X size={26} strokeWidth={2} />
+              </button>
+              {NAV_LINKS.map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  className="nav-drawer-link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setDrawerOpen(false);
+                    scrollToSection(href);
+                  }}
+                >
+                  {label}
+                </a>
+              ))}
+              <button
+                className="btn btn-clay btn-block"
+                onClick={() => {
                   setDrawerOpen(false);
-                  scrollToSection(href);
+                  scrollToGetStarted();
                 }}
               >
-                {label}
-              </a>
-            ))}
-            <button
-              className="btn btn-clay btn-block"
-              onClick={() => {
-                setDrawerOpen(false);
-                scrollToGetStarted();
-              }}
-            >
-              Get started
-            </button>
-          </nav>
-        </>
-      )}
+                Get started
+              </button>
+            </nav>
+          </>,
+          document.body,
+        )}
     </header>
   );
 }

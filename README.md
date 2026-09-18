@@ -11,9 +11,11 @@ Built as a pitch/demo product, not a production HIPAA-compliant system.
 
 - **Frontend:** React 19 + TypeScript + Vite, plain CSS (no UI framework), `react-router-dom`
 - **Backend:** FastAPI + SQLAlchemy + SQLite
+- **Mobile:** React Native + Expo Router, ported section-for-section from the web landing page
 
-For local setup and deployment instructions, see [`frontend/README.md`](frontend/README.md) and
-[`backend/README.md`](backend/README.md). This document covers what's actually built.
+For local setup and deployment instructions, see [`frontend/README.md`](frontend/README.md),
+[`backend/README.md`](backend/README.md) and [`mobile/README.md`](mobile/README.md). This
+document covers what's actually built.
 
 ## What's built
 
@@ -58,6 +60,13 @@ A video-call UI shell (not a real peer-to-peer connection — no WebRTC signalin
 - "Record this session" flow with a consent-style confirmation prompt (local state only,
   no actual recording is captured)
 
+### Mobile app landing page ([`mobile/app/(public)/landing.tsx`](mobile/app/(public)/landing.tsx))
+Same design, copy and images as the web landing page above, rebuilt with native
+components (hero, trust bar, how-it-works, virtual-vs-in-person comparison, match
+orbit, benefit cards, counsellor showcase, safety section, testimonial, FAQ, final
+CTA), plus a matching header with a slide-in nav drawer. See "Run the mobile app"
+below to preview it.
+
 ### Backend API ([`backend/app/main.py`](backend/app/main.py))
 FastAPI service backing all of the above:
 - `POST/GET /api/users`, `GET /api/clients`, `GET /api/counsellors` (filterable by
@@ -69,6 +78,21 @@ FastAPI service backing all of the above:
 - `GET /api/sessions/{id}`, `GET /api/clients/{id}/sessions`, `GET /api/counsellors/{id}/sessions`
 - Auto-seeds 5 counsellors (across the 5 specialties) and 2 clients on first run
   ([`seed.py`](backend/app/seed.py)) against a local SQLite DB
+
+## Run the mobile app
+
+```bash
+cd mobile
+npm install
+npm run web
+```
+
+Opens at **http://localhost:8081** (falls back to the next free port if that one's
+taken) — no simulator or physical device needed, runs the same Expo Router app in
+a browser tab via `react-native-web`. It lands on the public splash screen; the
+landing page itself is at **http://localhost:8081/landing**. For a native-device
+preview instead, see [`mobile/README.md`](mobile/README.md) (`npm start`, then
+scan the QR code with Expo Go or press `i`/`a` for a simulator/emulator).
 
 ## Not yet built (in this demo)
 
@@ -92,8 +116,8 @@ each proposed feature against what exists here today:
 | Admin dashboard | ⚠️ Partial — counsellor dashboard exists; no separate admin/login area |
 | 24/7 toll-free line (Twilio) | ❌ Not built — phone routing not implemented |
 | In-person appointments | ❌ Not built — only call-type sessions exist |
-| QR code access | ❌ Not built |
-| Native iOS/Android app | ❌ Not built — this is a responsive web app only |
+| QR code access | ⚠️ Partial — decorative sample QR code on the landing page; not wired to a real app-store link |
+| Native iOS/Android app | ⚠️ Partial — `mobile/` is a React Native/Expo app with the landing page and all 26 Figma screens built, running on offline demo data (see `mobile/README.md`); not published to either app store |
 | Real video/audio (Daily.co or equivalent) | ❌ Not built — session room is a UI shell |
 | Encryption, RBAC, secure password storage | ❌ Not built — no auth layer at all yet |
 

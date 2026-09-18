@@ -62,6 +62,49 @@ function useScrollReveal(active: boolean) {
   }, [active]);
 }
 
+const QR_GRID_SIZE = 15;
+
+function isFinderModule(x: number, y: number) {
+  const corners: [number, number][] = [
+    [0, 0],
+    [QR_GRID_SIZE - 7, 0],
+    [0, QR_GRID_SIZE - 7],
+  ];
+  for (const [cx, cy] of corners) {
+    const lx = x - cx;
+    const ly = y - cy;
+    if (lx < 0 || lx > 6 || ly < 0 || ly > 6) continue;
+    const onRing = lx === 0 || lx === 6 || ly === 0 || ly === 6;
+    const onCore = lx >= 2 && lx <= 4 && ly >= 2 && ly <= 4;
+    if (onRing || onCore) return true;
+    return false;
+  }
+  return null;
+}
+
+/** Decorative, non-scannable QR-code-styled placeholder for the app-download card (no real store listing exists yet for this preview build). */
+function QrGlyph() {
+  const modules: boolean[] = [];
+  for (let y = 0; y < QR_GRID_SIZE; y++) {
+    for (let x = 0; x < QR_GRID_SIZE; x++) {
+      const finder = isFinderModule(x, y);
+      modules.push(finder ?? (x * 3 + y * 7) % 5 === 0);
+    }
+  }
+  const cell = 100 / QR_GRID_SIZE;
+  return (
+    <svg viewBox="0 0 100 100" className="lv-qr-svg" role="img" aria-label="Sample QR code">
+      <rect width="100" height="100" rx="6" fill="#fff" />
+      {modules.map((on, i) => {
+        if (!on) return null;
+        const x = i % QR_GRID_SIZE;
+        const y = Math.floor(i / QR_GRID_SIZE);
+        return <rect key={i} x={x * cell} y={y * cell} width={cell} height={cell} fill="#102A43" />;
+      })}
+    </svg>
+  );
+}
+
 export function Landing() {
   const { setIdentity } = useIdentity();
   const navigate = useNavigate();
@@ -419,6 +462,19 @@ export function Landing() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="lv-download-section">
+        <div className="lv-download-copy lv-reveal">
+          <span className="lv-kicker lv-light">Get the app</span>
+          <h2 style={{ color: "#fff" }}>Haven, right in your pocket.</h2>
+          <p>Scan the code to grab the Haven app for iOS and Android and pick up where you left off.</p>
+          <small>Preview build, sample QR code shown for illustration.</small>
+        </div>
+        <div className="lv-qr-card lv-reveal">
+          <QrGlyph />
+          <span>Scan to download</span>
         </div>
       </section>
 
